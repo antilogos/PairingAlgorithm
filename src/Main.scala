@@ -22,11 +22,11 @@ object Main extends Tools {
 
     if(disposition._1.isEmpty) {
     } else {
-      logger(TRACE,s"Initial pairing is : ${disposition._1.map(table => table.mkString("[",",","]")).mkString("\n")}")
-      (1 to numberOfRound).toList.map { r =>
+      logger(DEBUG,s"Initial pairing is:\n${disposition._1.map(table => table.map(_.id).mkString("\t")).mkString("\n")}")
+      (1 to numberOfRound).foreach { r =>
         logger(INFO,s"Round $r - Beggining")
-        GeneticAlgorithm.arrangeSeating(disposition._1, disposition._2, r)
-        logger(INFO,s"Pairing for round $r is : ${disposition._1.map(table => table.mkString("[",",","]")).mkString("\n")}")
+        val roundDisposition = GeneticAlgorithm.arrangeSeating(disposition._1, disposition._2, r)
+        logger(INFO,s"Pairing for round $r is:\n${roundDisposition.map(table => table.map(_.id).mkString("\t")).mkString("\n")}")
       }
     }
   }

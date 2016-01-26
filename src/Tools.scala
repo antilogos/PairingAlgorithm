@@ -12,7 +12,8 @@ trait Tools {
     def openInscription = Main.sizeOfTable * 13
     def pickRandomConstraints(): Constraints = Main.listConstraintsLOTRLCG(Random.nextInt(Main.listConstraintsLOTRLCG.size))
     logger(INFO, "Random Initialization is on")
-    val subscriberList = (1 to openInscription).toList.map { i => new Subscriber("toto" + i.toString, (1 to 3).toList.map{i => pickRandomConstraints()}, null) }
+    val subscriberList = (1 to openInscription).toList.map { i => val groupName = fakeGroup(Random.nextInt(fakeGroup.size));
+      new Subscriber((if (groupName.equals("")) "OPEN" else groupName) + i.toString, (1 to 3).toList.map{i => pickRandomConstraints()}, groupName) }
     var i = 0
     while (i < openInscription) {
       logger(TRACE, s"Subscriber ${i + 1} \t : ${subscriberList(i).id} - ${subscriberList(i).constraints.mkString("[", ",", "]")}")
@@ -20,6 +21,8 @@ trait Tools {
     }
     subscriberList
   }
+
+  val fakeGroup = List("", "ALPHA", "", "BETA", "", "CHARLIE", "", "DELTA", "", "ECHO", "", "FOXTROT", "", "GOLF", "", "HECTOR", "")
 
   val DEBUG: Integer = 0
   val TRACE: Integer = 1

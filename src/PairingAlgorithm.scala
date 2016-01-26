@@ -18,7 +18,7 @@ object PairingAlgorithm extends Tools  {
         case Right(table) if table.size == Main.sizeOfTable => // Completing a table
           // Reject if the situation was banned
           if(isRestrictedPairing(pairing,ban)) {
-            logger(DEBUG,s"This situation was banned, hypothesis rejected : ${pairing} out of ${ban}")
+            logger(DEBUG,s"This situation was banned, hypothesis rejected: $pairing out of $ban")
             // Choose one of the pairing of the table
             val pair = table.diff(pairing.filter(_.size != Main.sizeOfTable).head.tail)
             // Remove the potential matching
@@ -109,7 +109,7 @@ object PairingAlgorithm extends Tools  {
         .mapValues(_.size).toList.sortBy(_._2)
       // Extract the first score and returns it with its first available pairing
       val bestOne = subscriberScore.head._1
-      logger(DEBUG,s"$bestOne as been selected, match remaining : ${compatibilityMap.get(bestOne).get.mkString(", ")}")
+      logger(DEBUG,s"$bestOne as been selected, match remaining: ${compatibilityMap.get(bestOne).get.mkString(", ")}")
       if(compatibilityMap.get(bestOne).get.intersect(subscriberScore.map(_._1).tail).isEmpty) {
         logger(DEBUG,"Current pairing does not satisfy all subscriber")
         Left(List(bestOne))
