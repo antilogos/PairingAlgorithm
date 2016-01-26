@@ -6,7 +6,7 @@
 class Subscriber(val id: String, val constraints: List[Constraints], val group: String) {
 
   override def toString : String = {
-    s"Subscriber:[id=$id, constraints=[${constraints.mkString(";")}]]"
+    s"[Subscriber:$id, Constraints=[${constraints.mkString(";")}]]"
   }
 }
 

@@ -8,7 +8,7 @@ object Main extends Tools {
 
   val sizeOfTable = 3
   val numberOfRound = 3
-  val logLevel = TRACE
+  val logLevel = INFO
 
   def main(args: Array[String]) {
     logger(INFO,"Start")
@@ -18,14 +18,15 @@ object Main extends Tools {
     logger(DEBUG,"Initialization - all seating are false")
     val seating: List[(Subscriber, Boolean)] = input.map((_, false))
 
-    val pairing = PairingAlgorithm.findPairing(seating, compatibility, Nil, Nil)
+    val disposition = PairingAlgorithm.findPairing(seating, compatibility, Nil, Nil)
 
-    if(pairing.isEmpty) {
+    if(disposition._1.isEmpty) {
     } else {
-      logger(TRACE,s"Initial pairing is : ${pairing.map(table => table.mkString("[",",","]")).mkString("\n")}")
+      logger(TRACE,s"Initial pairing is : ${disposition._1.map(table => table.mkString("[",",","]")).mkString("\n")}")
       (1 to numberOfRound).toList.map { r =>
         logger(INFO,s"Round $r - Beggining")
-        GeneticAlgorithm.arrangeSeating(pairing)
+        GeneticAlgorithm.arrangeSeating(disposition._1, disposition._2, r)
+        logger(INFO,s"Pairing for round $r is : ${disposition._1.map(table => table.mkString("[",",","]")).mkString("\n")}")
       }
     }
   }
