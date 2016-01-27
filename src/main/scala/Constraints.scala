@@ -15,9 +15,15 @@ class Constraints(val id: String, val attributes: Map[String, Any]) {
   def toExport(format: String) = {
     s"$id"
   }
-
   override def toString = {
     s"$id"
+  }
+}
+
+object Constraints {
+
+  def calculateScorePenalty(constraintList: List[List[Constraints]]): Int = {
+    Main.configuration.getInt("conf.score.constraintSpecific")
   }
 }
 
@@ -33,15 +39,17 @@ class ConstraintsLOTRLCG(name: String, id: String, threat: Int, wisdom: Int, att
 }
 
 object ConstraintsLOTRLCG {
-  def calculateScore(constraintList: List[List[ConstraintsLOTRLCG]]): Int = {
+  def calculateScorePenalty(constraintList: List[List[Constraints]]): Int = {
     // Evenly repartition of sphere is important - score from 0 to 60
     val sphereDiff = constraintList.flatten.groupBy(_.getKey("sphere")).mapValues(_.size)
     val sphereScore = List((sphereDiff.values.max - sphereDiff.values.min) * 5, 60).min
-    // Evenly repartition of threat is important - score from 0 to 40
+    // Table lacking a Sphere - bonus penalty of 20
+    val lackScore = if(sphereDiff.values.min == 0) 20 else 0
+    // Evenly repartition of threat is important - score from 0 to 20
     val threatMean = constraintList.map(_.map(_.getNum("threat")).sum).sum / Main.sizeOfTable
-    val threatScore = List(List(threatMean - 27, 27 - threatMean).max * 2, 40).min
+    val threatScore = List(List(threatMean - 27, 27 - threatMean).max, 40).min
     // Score over 100
-    (sphereScore + threatScore)
+    sphereScore + lackScore + threatScore
   }
 
   val list = List(new ConstraintsLOTRLCG("Amarthiul","Amarthiúl",10,1,3,3,3,"L"),

@@ -86,7 +86,7 @@ object GeneticAlgorithm extends Tools {
     }
     // Constraint repartition is 25% of the weight
     val constraintList = pair.map(_.constraints)
-    score = score - ( ConstraintsLOTRLCG.calculateScore(constraintList.asInstanceOf[List[List[ConstraintsLOTRLCG]]]) * constrainstSpecificScoreWeight / 100)
+    score = score - ( ConstraintsLOTRLCG.calculateScorePenalty(constraintList.asInstanceOf[List[List[ConstraintsLOTRLCG]]]) * constrainstSpecificScoreWeight / 100)
     logger(TRACE, s"Score for table ${pair.mkString(",")}: $score")
     score
   }
