@@ -44,7 +44,7 @@ object FileOperation extends Tools {
   def saveFile(filename: String, roundPairing: List[List[List[Subscriber]]]) = {
     try {
       val writer = new PrintWriter(new File(s"$filename.out"))
-      roundPairing.foreach(round => round.foreach(table => table.foreach(sub => writer.write(sub.toString))))
+      writer.write(Subscriber.exportTournament(roundPairing, Main.configuration.getString("conf.file.format")))
       writer.close()
     } catch {
       case ex: IOException => println(s"Had an IOException trying to write the file $filename.out.")

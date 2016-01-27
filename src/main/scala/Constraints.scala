@@ -12,6 +12,10 @@ class Constraints(val id: String, val attributes: Map[String, Any]) {
 
   def getKey(key: String): String = attributes.get(key).get.toString
 
+  def toExport(format: String) = {
+    s"$id"
+  }
+
   override def toString = {
     s"$id"
   }
@@ -19,6 +23,13 @@ class Constraints(val id: String, val attributes: Map[String, Any]) {
 
 class ConstraintsLOTRLCG(name: String, id: String, threat: Int, wisdom: Int, attack: Int, defense: Int, hitpoint: Int, sphere: String)
   extends Constraints(id, Map("name"->name,"threat"->threat, "wisdom"-> wisdom, "attack"->attack, "defense"->defense, "hitpoint"->hitpoint, "sphere"->sphere)) {
+
+  override def toExport(format: String) = {
+    format match {
+      case "txt" => s"$id"
+      case "bbc" => s"$id :${sphere match {case "T" => "tactique" case "R" => "connaissance" case "L" => "commandement" case "S" => "energie" case "N" => "gandalf"}}:"
+    }
+  }
 }
 
 object ConstraintsLOTRLCG {

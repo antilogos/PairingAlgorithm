@@ -1,3 +1,5 @@
+import java.io.{IOException, File, PrintWriter}
+
 import scala.util.Random
 
 /**
@@ -18,6 +20,13 @@ trait Tools {
     while (i < openInscription) {
       logger(TRACE, s"Subscriber ${i + 1} \t : ${subscriberList(i).id} - ${subscriberList(i).constraints.mkString("[", ",", "]")}")
       i += 1
+    }
+    try {
+      val writer = new PrintWriter(new File("randomtest.in"))
+      writer.write(subscriberList.map(_.toExport(Main.configuration.getString("conf.file.format"))).mkString("[table border=\"1\"][tr]","[/tr]\n[tr]","[/tr][/table]"))
+      writer.close()
+    } catch {
+      case ex: IOException => println(s"Had an IOException trying to write the file randomtest.in.")
     }
     subscriberList
   }
