@@ -10,9 +10,9 @@ trait Tools {
 
   def randomSeed(): List[Subscriber] = {
     def openInscription = Main.sizeOfTable * 13
-    def pickRandomConstraints(): Constraints = Main.listConstraintsLOTRLCG(Random.nextInt(Main.listConstraintsLOTRLCG.size))
+    def pickRandomConstraints(): Constraints = ConstraintsLOTRLCG.list(Random.nextInt(ConstraintsLOTRLCG.list.size))
     logger(INFO, "Random Initialization is on")
-    val subscriberList = (1 to openInscription).toList.map { i => val groupName = fakeGroup(Random.nextInt(fakeGroup.size));
+    val subscriberList = (1 to openInscription).toList.map { i => val groupName = fakeGroup(Random.nextInt(fakeGroup.size))
       new Subscriber((if (groupName.equals("")) "OPEN" else groupName) + i.toString, (1 to 3).toList.map{i => pickRandomConstraints()}, groupName) }
     var i = 0
     while (i < openInscription) {

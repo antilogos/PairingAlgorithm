@@ -8,8 +8,12 @@ import scala.collection.mutable
  * - constraints are evenly distributed
  */
 object GeneticAlgorithm extends Tools {
-  private val numberOfTry = 1000
-  private val chanceOfMutation = 0.01
+  //private val numberOfTry = 1000
+  //private val chanceOfMutation = 0.01
+  val previousRound: scala.collection.mutable.MutableList[List[List[Subscriber]]] = mutable.MutableList()
+  val groupScoreWeight = 50
+  val alreadySeenScoreWeight = 25
+  val constrainstSpecificScoreWeight = 25
 
   def arrangeSeating(initialPairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]], round: Int): List[List[Subscriber]] = {
     // initiale pairing : Pinit
@@ -58,7 +62,8 @@ object GeneticAlgorithm extends Tools {
       // End of algorithm pass, return the best pairing
       logger(INFO,s"End of Genetic Algorithm, new score is ${listOfImprovement.valuesIterator.max}")
       // Add the situation in previous round
-      ScoreTrace.previousRound += newMaxScore
+      previousRound += newMaxScore
+      logger(TRACE,s"Pairing for round $round is:\n${newMaxScore.map(table => table.mkString("\t")).mkString("\n")}")
       newMaxScore
     } else {
       searchSeatingForRound(newImprovement, seating, pairing, ban, newMaxScore, round)
@@ -70,32 +75,19 @@ object GeneticAlgorithm extends Tools {
   }
 
   private def computeTableScore(round: Integer, pair: List[Subscriber]) = {
-    var score = 100
+    var score = groupScoreWeight + alreadySeenScoreWeight + constrainstSpecificScoreWeight
     // Group is 50% of the weight
-    if(!pair.filterNot(_.group.equals("")).groupBy(_.group).forall(_._2.size <= 1)) {
-      score = score - 50
+    if(pair.filterNot(_.group == "").groupBy(_.group).exists(_._2.size > 1)) {
+      score = score - groupScoreWeight
     }
     // Already seen is 25% of the weight
-    if(ScoreTrace.previousRound.exists(round => round.exists(table => table.intersect(pair).size > 1))) {
-      score = score - 25
+    if(previousRound.exists(round => round.exists(table => table.intersect(pair).size > 1))) {
+      score = score - alreadySeenScoreWeight
     }
     // Constraint repartition is 25% of the weight
     val constraintList = pair.map(_.constraints)
-    val sphereDiff = constraintList.flatten.groupBy(_.getKey("sphere")).mapValues(_.size)
-    val sphereScore = (sphereDiff.values.max - sphereDiff.values.min) * 5
-    val threatDiff = constraintList.map(_.map(_.getNum("threat")).sum)
-    val threatScore = (threatDiff.max - threatDiff.min) * 4
-    // Score over 250, we divide by 10 to get a 25% weight
-    score = score - ( List(sphereScore + threatScore, 250).min / 10 )
+    score = score - ( ConstraintsLOTRLCG.calculateScore(constraintList.asInstanceOf[List[List[ConstraintsLOTRLCG]]]) * constrainstSpecificScoreWeight / 100)
     logger(TRACE, s"Score for table ${pair.mkString(",")}: $score")
     score
   }
-
-  private def maxScore(pair1 : (Subscriber, Int), pair2: (Subscriber, Int)): (Subscriber, Int) = {
-    if(pair1._2 >= pair2._2) pair1 else pair2
-  }
-}
-
-object ScoreTrace {
-  val previousRound: scala.collection.mutable.MutableList[List[List[Subscriber]]] = mutable.MutableList()
 }
