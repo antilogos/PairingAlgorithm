@@ -11,9 +11,9 @@ object GeneticAlgorithm extends Tools {
   //private val numberOfTry = 1000
   //private val chanceOfMutation = 0.01
   val previousRound: scala.collection.mutable.MutableList[List[List[Subscriber]]] = mutable.MutableList()
-  val groupScoreWeight = 50
-  val alreadySeenScoreWeight = 25
-  val constrainstSpecificScoreWeight = 25
+  val groupScoreWeight = Main.configuration.getInt("conf.score.group")
+  val alreadySeenScoreWeight = Main.configuration.getInt("conf.score.alreadySeen")
+  val constrainstSpecificScoreWeight = Main.configuration.getInt("conf.score.constraintSpecific")
 
   def arrangeSeating(initialPairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]], round: Int): List[List[Subscriber]] = {
     // initiale pairing : Pinit

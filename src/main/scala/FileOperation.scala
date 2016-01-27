@@ -1,4 +1,5 @@
 import java.io.{PrintWriter, IOException, FileNotFoundException, File}
+import java.util.Properties
 
 import scala.io.Source
 /**
@@ -8,7 +9,17 @@ import scala.io.Source
  */
 object FileOperation extends Tools {
 
-  val separator = "\t"
+  val separator = Main.configuration.getString("conf.file.separator")
+
+  def configure() = {
+    val reader = Source.fromURL(getClass.getResource("pairing.properties")).bufferedReader()
+    try {
+      new Properties().load(reader)
+    } catch {
+      case ex: Exception => println("No properties file found, using default properties")
+
+    }
+  }
 
   def loadFile(filename: String): List[Subscriber] = {
     try {

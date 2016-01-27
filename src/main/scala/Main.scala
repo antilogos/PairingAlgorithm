@@ -1,3 +1,4 @@
+import com.typesafe.config.ConfigFactory
 /**
  * Created by vdoquang on 20/01/16.
  * 
@@ -6,9 +7,11 @@
  */
 object Main extends Tools {
 
-  val sizeOfTable = 3
-  val numberOfRound = 3
-  val logLevel = INFO
+  val configuration = ConfigFactory.load()
+
+  val sizeOfTable = configuration.getInt("conf.tournament.sizeOfTable")
+  val numberOfRound = configuration.getInt("conf.tournament.numberOfRound")
+  val logLevel = configuration.getInt("conf.logLevel")
 
   def main(args: Array[String]) {
     val fileName = if(args.nonEmpty) args(0) else "randomtest"
