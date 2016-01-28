@@ -39,17 +39,24 @@ class ConstraintsLOTRLCG(name: String, id: String, threat: Int, wisdom: Int, att
 }
 
 object ConstraintsLOTRLCG {
-  def calculateScorePenalty(constraintList: List[List[Constraints]]): Int = {
+  def   calculateScorePenalty(constraintList: List[List[Constraints]]): Int = {
+    val sphereList = List[String]("T","R","L","S")
     // Evenly repartition of sphere is important - score from 0 to 60
-    val sphereDiff = constraintList.flatten.groupBy(_.getKey("sphere")).mapValues(_.size)
-    val sphereScore = List((sphereDiff.values.max - sphereDiff.values.min) * 5, 60).min
-    // Table lacking a Sphere - bonus penalty of 20
-    val lackScore = if(sphereDiff.values.min == 0) 20 else 0
+    val sphereDiff = sphereList.map(sphere => constraintList.flatten.count(_.getKey("sphere") == sphere))
+    val sphereScore = List((sphereDiff.max - sphereDiff.min) * 20 / Main.sizeOfTable, 60).min
+    // Table lacking a Sphere - bonus penalty of 40
+    val lackScore = if(sphereDiff.min == 0) 40 else 0
     // Evenly repartition of threat is important - score from 0 to 20
     val threatMean = constraintList.map(_.map(_.getNum("threat")).sum).sum / Main.sizeOfTable
     val threatScore = List(List(threatMean - 27, 27 - threatMean).max, 40).min
     // Score over 100
-    sphereScore + lackScore + threatScore
+    List(sphereScore + lackScore + threatScore, 100).min
+  }
+
+  def displayTableReport(constraintList: List[List[Constraints]]) = {
+    val sphereDiff = List[String]("T","R","L","S").map(sphere => (sphere,constraintList.flatten.count(_.getKey("sphere") == sphere)))
+    val lackScore = sphereDiff.filter(_._2 == 0).map(_._1).mkString(",")
+    s"sphere diff=$sphereDiff - lack: $lackScore"
   }
 
   val list = List(new ConstraintsLOTRLCG("Amarthiul","Amarthiúl",10,1,3,3,3,"L"),

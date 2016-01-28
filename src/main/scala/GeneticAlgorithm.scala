@@ -53,8 +53,7 @@ object GeneticAlgorithm extends Tools {
       newImprovement = newImprovement + (pickMutation -> computeRoundScore(round, mutatedPairing._1))
     }
     // Add the score to the list
-    val newMaxScore = if(listOfImprovement.forall(newImprovement.getOrElse(pickMutation,0) > _._2)) {
-      logger(DEBUG,s"Found a better score than ${listOfImprovement.values.max} with ${pickMutation.id}: ${newImprovement.getOrElse(pickMutation,0)}")
+    val newMaxScore = if(newImprovement.getOrElse(pickMutation,0) > listOfImprovement.values.max) {
       // We want to retry optimizing other combination if the score can be better
       newImprovement = newImprovement.map{case (sub, score) if score > 0 && score < newImprovement.getOrElse(pickMutation, 0) => (sub, 0)
       case (sub, score) => (sub, score)}
@@ -63,7 +62,8 @@ object GeneticAlgorithm extends Tools {
     logger(DEBUG, s"Current score ${newImprovement.map{case (sub, score) => s"${sub.id}:$score"}.mkString(",")}")
     if(newImprovement.forall(_._2 != 0)) {
       // End of algorithm pass, return the best pairing
-      logger(INFO,s"End of Genetic Algorithm, new score is ${listOfImprovement.valuesIterator.max}")
+      logger(INFO,s"End of Genetic Algorithm, new score is ${newImprovement.values.max}")
+      (1 to newMaxScore.size).toList.foreach{i => displayTableReport(round, i, newMaxScore(i-1))}
       // Add the situation in previous round
       previousRound += newMaxScore
       logger(TRACE,s"Pairing for round $round is:\n${newMaxScore.map(table => table.mkString("\t")).mkString("\n")}")
@@ -92,5 +92,14 @@ object GeneticAlgorithm extends Tools {
     score = score - ( ConstraintsLOTRLCG.calculateScorePenalty(constraintList.asInstanceOf[List[List[ConstraintsLOTRLCG]]]) * constrainstSpecificScoreWeight / 100)
     logger(TRACE, s"Score for table ${pair.mkString(",")}: $score")
     score
+  }
+
+  private def displayTableReport(round: Integer, table: Int, pair: List[Subscriber]) = {
+    var report = ""
+    if(pair.filterNot(_.group == "").groupBy(_.group).exists(_._2.size > 1)) report += "group conflict"
+    if(previousRound.exists(round => round.exists(table => table.intersect(pair).size > 1))) report += "seen in previous round"
+    report += ConstraintsLOTRLCG.displayTableReport(pair.map(_.constraints).asInstanceOf[List[List[ConstraintsLOTRLCG]]])
+    if(report.isEmpty) report += "ok"
+    println(s"Round $round - table $table - score ${computeTableScore(round,pair)}: $report")
   }
 }
