@@ -51,7 +51,7 @@ object PairingAlgorithm extends Tools  {
             logger(TRACE,"End of Pairing Algorithm, no solution was found")
             (Nil, ban)
           } else {
-            // Break the table
+            // Break the tables
             val newSeating = seating.map(seat => (seat._1, false))
             // Add ban graph
             val newBan = pairing :: ban
@@ -78,9 +78,9 @@ object PairingAlgorithm extends Tools  {
       // Prioritize completion of table (there should be only one)
       val tableToFill = pairing.filter(_.size != Main.sizeOfTable).head
       logger(DEBUG,s"Try to fill table ${tableToFill.mkString(", ")}")
-      val eligibleMatch = seating.map(_._1)
+      val eligibleMatch = seating.filterNot(_._2).map(_._1)
         // Remove subscriber with constraint, this also remove the member of the group
-        .filter(_.constraints.intersect(tableToFill.flatMap(_.constraints)).isEmpty)
+        .filter(_.constraints.map(_.getKey("name")).intersect(tableToFill.flatMap(_.constraints.map(_.getKey("name")))).isEmpty)
       val subscriberScore = compatibilityMap.filterKeys(eligibleMatch.contains(_))
         // Filter available compatibility
         .filterKeys(tableToFill.foldLeft(seating.map(_._1))((acc, curr) => compatibilityMap.get(curr).get.intersect(acc)).contains(_))
@@ -149,6 +149,6 @@ object PairingAlgorithm extends Tools  {
     // Put all subscriber available to all subscriber except themself
     Map(input.map{register => register -> input.filterNot(_.equals(register))}.toSeq: _*)
     // Filter incompatibility
-    .map{case (sub, possibleMatch) => (sub, possibleMatch.filter(current => sub.constraints.intersect(current.constraints).isEmpty))}
+    .map{case (sub, possibleMatch) => (sub, possibleMatch.filter(current => sub.constraints.map(_.getKey("name")).intersect(current.constraints.map(_.getKey("name"))).isEmpty))}
   }
 }

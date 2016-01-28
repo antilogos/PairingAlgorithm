@@ -38,10 +38,12 @@ object GeneticAlgorithm extends Tools {
     // Remove all from their pairing
     val newPairing = pairing.map(_.filterNot(_.equals(pickMutation)).filterNot(eligibleMutation.contains(_))).filter(_.nonEmpty)
     logger(TRACE,s"New Pairing disposition is ${newPairing.map(_.map(_.id).mkString("-")).mkString(";")} to pass to Pairing Algorithm")
-    val newSeating = (pickMutation, false) :: seating.filterNot(_.equals(pickMutation)).filterNot(eligibleMutation.contains(_)) ++ eligibleMutation.map{(_, false)}
+    val newSeating = (pickMutation, false) :: seating.filterNot(_._1.equals(pickMutation)).filterNot(seat => eligibleMutation.contains(seat._1)) ++ eligibleMutation.map{(_, false)}
     // Add the mutation in ban list
     val newBan = pairing :: ban
-    val mutatedPairing = PairingAlgorithm.findPairing(newSeating, PairingAlgorithm.buildCompatibilityMap(seating.map(_._1)), newPairing, newBan)
+    // Build new compatibility map
+    val newCompatibilityMap = PairingAlgorithm.buildCompatibilityMap(seating.filterNot(_._2).map(_._1))
+    val mutatedPairing = PairingAlgorithm.findPairing(newSeating, newCompatibilityMap, newPairing, newBan)
     var newImprovement = listOfImprovement
     if(mutatedPairing._1.isEmpty) {
       logger(TRACE,s"Mutation did not result in possible pairing")
@@ -52,6 +54,7 @@ object GeneticAlgorithm extends Tools {
     }
     // Add the score to the list
     val newMaxScore = if(listOfImprovement.forall(newImprovement.getOrElse(pickMutation,0) > _._2)) {
+      logger(DEBUG,s"Found a better score than ${listOfImprovement.values.max} with ${pickMutation.id}: ${newImprovement.getOrElse(pickMutation,0)}")
       // We want to retry optimizing other combination if the score can be better
       newImprovement = newImprovement.map{case (sub, score) if score > 0 && score < newImprovement.getOrElse(pickMutation, 0) => (sub, 0)
       case (sub, score) => (sub, score)}

@@ -32,7 +32,7 @@ class ConstraintsLOTRLCG(name: String, id: String, threat: Int, wisdom: Int, att
 
   override def toExport(format: String) = {
     format match {
-      case "txt" => s"$id"
+      case "txt" => s"$id ($sphere)"
       case "bbc" => s"$id :${sphere match {case "T" => "tactique" case "R" => "connaissance" case "L" => "commandement" case "S" => "energie" case "N" => "gandalf"}}:"
     }
   }
