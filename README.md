@@ -93,8 +93,8 @@ __src/main/scala/FileOperation.scala__: source file for file operation: reading 
 
 # TODO LIST
 [x] Allow different number of subscriber per table 
-[ ] Heuristic algorithm
 [ ] Generic support for constraints
 [ ] More file format support
 [ ] Allow drop out of subscribers in between rounds
+[ ] Heuristic algorithm
 [ ] See if possible for Shuffle to make a mean over all the rounds

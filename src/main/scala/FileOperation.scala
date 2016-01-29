@@ -1,5 +1,4 @@
-import java.io.{PrintWriter, IOException, FileNotFoundException, File}
-import java.util.Properties
+import java.io.{File, FileNotFoundException, IOException, PrintWriter}
 
 import scala.io.Source
 /**
@@ -11,28 +10,25 @@ object FileOperation extends Tools {
 
   val separator = Conf.configuration.getString("conf.file.separator")
 
-  def configure() = {
-    val reader = Source.fromURL(getClass.getResource("pairing.properties")).bufferedReader()
+  def loadConfigurationFile(filename: String) = {
+    var separator = "\t"
     try {
-      new Properties().load(reader)
-    } catch {
-      case ex: Exception => println("No properties file found, using default properties")
-
-    }
-  }
-
-  def loadFile(filename: String): List[Subscriber] = {
-    try {
-      val constraintMap = ConstraintsLOTRLCG.list.map{constraint => (constraint.id, constraint)}.toMap
-      Source.fromFile(filename,"UTF-8").getLines().map(_.trim).filterNot(_.startsWith("#")).map(_.split(separator).map(_.trim)).map{ fileFields =>
-        val fields = if(fileFields.length == 5) fileFields else Array.concat(fileFields, Array("", "", ""))
-        new Subscriber(fields(0).trim,(1 to 3).toList.map{i => try {
-          constraintMap.get(fields(i)).get
-        } catch {
-          case ex: NoSuchElementException => throw new Exception(s"Couldn't find constraints ${fields(i)}")
-        }
-        }, fields(4))
-      }.toList
+      Source.fromFile(filename, "UTF-8").getLines().foreach {
+        case line: String if line.startsWith("separator=") => separator = line.replaceAll("separator=(.)", "$1")
+        case line: String if line.startsWith("|") => Constraints.identityRules = line.substring(1)
+        case line: String if line.startsWith(":") => Constraints.calculationRules = line.substring(1) :: Constraints.calculationRules
+        case line: String if line.startsWith("#") => // nothing
+        case line: String if line.startsWith("fields.constraints=") => Constraints.fields = line.substring(19).split(separator).toList.map(_.trim)
+        case line: String if line.startsWith("fields.subscribers=") => Subscriber.fields = line.substring(19).split(separator).toList.map(_.trim)
+        case line: String => Constraints.inventory += (line.split(separator).map(_.trim).zip(Constraints.fields).map(_.swap).toMap.get("ID").get -> line.split(separator).map(_.trim).zip(Constraints.fields).map(_.swap).toMap)
+      }
+      logger(INFO, s"Using configuration from $filename")
+      logger(DEBUG,s"separator: $separator")
+      logger(DEBUG, s"identityRules: ${Constraints.identityRules}")
+      logger(DEBUG, s"calculationRules: ${Constraints.calculationRules}")
+      logger(DEBUG, s"constraints fields: ${Constraints.fields}")
+      logger(DEBUG, s"subscribers fields: ${Subscriber.fields}")
+      logger(DEBUG, s"inventory: ${Constraints.inventory}")
     } catch {
       case ex: FileNotFoundException => println(s"Couldn't find the file $filename.")
         Nil
@@ -41,7 +37,23 @@ object FileOperation extends Tools {
     }
   }
 
-  def saveFile(filename: String, roundPairing: List[List[List[Subscriber]]]) = {
+  def loadSubscriberFile(filename: String): List[Subscriber] = {
+    try {
+      //val constraintMap = ConstraintsLOTRLCG.list.map{constraint => (constraint.id, constraint)}.toMap
+      val lines = Source.fromFile(filename,"UTF-8").getLines().filterNot(_.startsWith("#")).map(_.trim)
+      val subscibers = lines.map(_.split(separator).map(_.trim).zip(Subscriber.fields).map(_.swap).toMap).map{new Subscriber(_)}.toList
+      logger(INFO, s"Using list of subscribers from $filename")
+      logger(DEBUG, s"subscribers list: $subscibers")
+      subscibers
+    } catch {
+      case ex: FileNotFoundException => println(s"Couldn't find the file $filename.")
+        Nil
+      case ex: IOException => println(s"Had an IOException trying to read the file $filename.")
+        Nil
+    }
+  }
+
+  def saveSubscriberFile(filename: String, roundPairing: List[List[List[Subscriber]]]) = {
     try {
       val writer = new PrintWriter(new File(s"$filename.out"))
       writer.write(Subscriber.exportTournament(roundPairing, Conf.configuration.getString("conf.file.format")))

@@ -5,6 +5,12 @@
  */
 class Subscriber(val id: String, val constraints: List[Constraints], val group: String) {
 
+  def this(attribute: Map[String, String]) {
+    this(attribute.getOrElse("ID",""),
+      attribute.filterKeys(_.startsWith("C.")).values.map(new Constraints(_)).toList,
+      attribute.getOrElse("GROUP",""))
+  }
+
   override def toString : String = {
     s"[Subscriber:$id, Constraints=[${constraints.mkString(";")}]]"
   }
@@ -18,6 +24,9 @@ class Subscriber(val id: String, val constraints: List[Constraints], val group: 
 }
 
 object Subscriber {
+
+  var fields: List[String] = List("ID", "GROUP")
+
   def blank = {
     new Subscriber("", Nil, "")
   }

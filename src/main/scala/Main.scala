@@ -7,9 +7,11 @@ import com.typesafe.config.ConfigFactory
  */
 object Main extends Tools {
   def main(args: Array[String]) {
+    FileOperation.loadConfigurationFile("lotrlcg.pairing")
+
     val fileName = if(args.nonEmpty) args(0) else "randomtest"
     logger(INFO,s"Start using $fileName")
-    val input: List[Subscriber] = if(args.nonEmpty) FileOperation.loadFile(fileName) else randomSeed()
+    val input: List[Subscriber] = if(args.nonEmpty) FileOperation.loadSubscriberFile(fileName) else randomSeed()
     // Complete the tournament with blank subscribers, who doesn't contribute to score, are compatible with everyone, are already seated and cannot move
     val listSubscriber = (if(input.size%Conf.sizeOfTable != 0) (1 to Conf.sizeOfTable - (input.size % Conf.sizeOfTable) ).toList.map{_=>Subscriber.blank} else Nil) ++ input
     // Initialization - all pairing are constraints driven
@@ -35,7 +37,7 @@ object Main extends Tools {
         // Add the situation in previous round
         ShuffleAlgorithm.arrangeSeating(disposition._1, disposition._2, round, previousRound) :: previousRound
       }
-      FileOperation.saveFile(fileName, roundDisposition)
+      FileOperation.saveSubscriberFile(fileName, roundDisposition)
     }
   }
 }

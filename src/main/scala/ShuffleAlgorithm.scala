@@ -4,7 +4,7 @@
 object ShuffleAlgorithm extends Tools {
   def arrangeSeating(initialPairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]], round: Int, previousRound: List[List[List[Subscriber]]]): List[List[Subscriber]] = {
     logger(INFO,s"Score of initial pairing ${Constraints.computeRoundScore(round,initialPairing, previousRound)}")
-    val bestOfNRun = (1 to 10).toList.foldLeft(initialPairing){(acc, curr) =>
+    val bestOfNRun = (1 to 3).toList.foldLeft(initialPairing){(acc, curr) =>
       // Shuffle the ordering
       val shufflePairing = scala.util.Random.shuffle(initialPairing)
       // Run the Greedy algorithm

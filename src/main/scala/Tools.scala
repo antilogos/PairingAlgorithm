@@ -11,8 +11,8 @@ import scala.util.Random
 trait Tools {
 
   def randomSeed(): List[Subscriber] = {
-    def openInscription = Conf.sizeOfTable * 13
-    def pickRandomConstraints(): Constraints = ConstraintsLOTRLCG.list(Random.nextInt(ConstraintsLOTRLCG.list.size))
+    def openInscription = Conf.sizeOfTable * 3
+    def pickRandomConstraints(): Constraints = new Constraints(scala.util.Random.shuffle(Constraints.inventory.keys.toList).head)
     logger(INFO, "Random Initialization is on")
     val subscriberList = (1 to openInscription).toList.map { i => val groupName = fakeGroup(Random.nextInt(fakeGroup.size))
       new Subscriber((if (groupName.equals("")) "OPEN" else groupName) + i.toString, (1 to 3).toList.map{i => pickRandomConstraints()}, groupName) }

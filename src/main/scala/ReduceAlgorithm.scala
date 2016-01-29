@@ -43,6 +43,11 @@ object ReduceAlgorithm extends Tools  {
         case Left(pair) if pair.size > 1 => logger(DEBUG,"Hypothesis rejected")
           // Remove the potential matching
           val newCompatibilityMap = compatibilityMap.filterKeys(sub => pair.contains(sub)).mapValues(_.diff(pair))
+          if(newCompatibilityMap.isEmpty) {
+            // Running out of compatibility
+            logger(TRACE,s"No more compatibility possible, no solution remaining")
+            return (Nil, ban)
+          }
           // Remove the incomplete table
           val newPairing = pairing.filter(_.intersect(pair).isEmpty)
           findPairing(seating, newCompatibilityMap, newPairing, ban)
@@ -80,7 +85,7 @@ object ReduceAlgorithm extends Tools  {
       logger(DEBUG,s"Try to fill table ${tableToFill.mkString(", ")}")
       val eligibleMatch = seating.filterNot(_._2).map(_._1)
         // Remove subscriber with constraint, this also remove the member of the group
-        .filter(_.constraints.map(_.getKey("name")).intersect(tableToFill.flatMap(_.constraints.map(_.getKey("name")))).isEmpty)
+        .filter(_.constraints.map(_.getKey(Constraints.identityRules)).intersect(tableToFill.flatMap(_.constraints.map(_.getKey(Constraints.identityRules)))).isEmpty)
       val subscriberScore = compatibilityMap.filterKeys(eligibleMatch.contains(_))
         // Filter available compatibility
         .filterKeys(tableToFill.foldLeft(seating.map(_._1))((acc, curr) => compatibilityMap.get(curr).get.intersect(acc)).contains(_))
@@ -149,6 +154,6 @@ object ReduceAlgorithm extends Tools  {
     // Put all subscriber available to all subscriber except themself
     Map(input.map{register => register -> input.filterNot(_.equals(register))}.toSeq: _*)
     // Filter incompatibility
-    .map{case (sub, possibleMatch) => (sub, possibleMatch.filter(current => sub.constraints.map(_.getKey("name")).intersect(current.constraints.map(_.getKey("name"))).isEmpty))}
+    .map{case (sub, possibleMatch) => (sub, possibleMatch.filter(current => sub.constraints.map(_.getKey(Constraints.identityRules)).intersect(current.constraints.map(_.getKey(Constraints.identityRules))).isEmpty))}
   }
 }
