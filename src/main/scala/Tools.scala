@@ -11,7 +11,7 @@ import scala.util.Random
 trait Tools {
 
   def randomSeed(): List[Subscriber] = {
-    def openInscription = Main.sizeOfTable * 13
+    def openInscription = Conf.sizeOfTable * 13
     def pickRandomConstraints(): Constraints = ConstraintsLOTRLCG.list(Random.nextInt(ConstraintsLOTRLCG.list.size))
     logger(INFO, "Random Initialization is on")
     val subscriberList = (1 to openInscription).toList.map { i => val groupName = fakeGroup(Random.nextInt(fakeGroup.size))
@@ -23,7 +23,7 @@ trait Tools {
     }
     try {
       val writer = new PrintWriter(new File("randomtest.in"))
-      writer.write(subscriberList.map(_.toExport(Main.configuration.getString("conf.file.format"))).mkString("[table border=\"1\"][tr]","[/tr]\n[tr]","[/tr][/table]"))
+      writer.write(subscriberList.map(_.toExport(Conf.configuration.getString("conf.file.format"))).mkString("[table border=\"1\"][tr]","[/tr]\n[tr]","[/tr][/table]"))
       writer.close()
     } catch {
       case ex: IOException => println(s"Had an IOException trying to write the file randomtest.in.")
@@ -38,6 +38,6 @@ trait Tools {
   val INFO: Integer = 2
 
   def logger(level: Int, string: String) = {
-    if (level >= Main.logLevel) println(string)
+    if (level >= Conf.logLevel) println(string)
   }
 }

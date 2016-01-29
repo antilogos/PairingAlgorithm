@@ -18,6 +18,10 @@ class Subscriber(val id: String, val constraints: List[Constraints], val group: 
 }
 
 object Subscriber {
+  def blank = {
+    new Subscriber("", Nil, "")
+  }
+
   def exportTable(table: List[Subscriber], format: String) = {
     format match {
       case "txt" => table.map(_.toExport(format)).mkString("\n")

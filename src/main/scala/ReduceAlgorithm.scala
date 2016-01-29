@@ -1,10 +1,10 @@
 /**
- * The Pairing Algorithm will recursively search for the first possible pairing satisfying all constraints.
+ * The Reduce Algorithm will recursively search for the first possible pairing satisfying all constraints.
  * It will choose the most difficult subscribers to pair and try to pair them.
  * When there is no more match possible while subscriber are not all seated, it will ban the current position and roll back.
  * If all positions from the start are banned, the Algorithm will end in faillure.
  */
-object PairingAlgorithm extends Tools  {
+object ReduceAlgorithm extends Tools  {
   def findPairing(seating: List[(Subscriber, Boolean)], compatibilityMap: Map[Subscriber, List[Subscriber]], pairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]]): (List[List[Subscriber]], List[List[List[Subscriber]]]) = {
     // Verify stop condition : all seated
     if(seating.forall(_._2)) {
@@ -12,19 +12,19 @@ object PairingAlgorithm extends Tools  {
       // Success
       (pairing, ban)
     } else {
-      logger(DEBUG,s"running pairing algorithm, set items : ${pairing.filter(_.size == Main.sizeOfTable).map(table => table.map(sub => s"${sub.id}-${sub.constraints.mkString(",")}").mkString("[",", ","]")).mkString(";")}")
+      logger(DEBUG,s"running pairing algorithm, set items : ${pairing.filter(_.size == Conf.sizeOfTable).map(table => table.map(sub => s"${sub.id}-${sub.constraints.mkString(",")}").mkString("[",", ","]")).mkString(";")}")
       val hypothesis: Either[List[Subscriber],List[Subscriber]] = bestSuit(seating, compatibilityMap, pairing)
       hypothesis match {
-        case Right(table) if table.size == Main.sizeOfTable => // Completing a table
+        case Right(table) if table.size == Conf.sizeOfTable => // Completing a table
           // Reject if the situation was banned
           if(isRestrictedPairing(pairing,ban)) {
             logger(DEBUG,s"This situation was banned, hypothesis rejected: $pairing out of $ban")
             // Choose one of the pairing of the table
-            val pair = table.diff(pairing.filter(_.size != Main.sizeOfTable).head.tail)
+            val pair = table.diff(pairing.filter(_.size != Conf.sizeOfTable).head.tail)
             // Remove the potential matching
             val newCompatibilityMap = compatibilityMap.filterKeys(sub => pair.contains(sub)).mapValues(_.diff(pair))
             // Remove temp table
-            val newPairing = pairing.filter(_.size == Main.sizeOfTable)
+            val newPairing = pairing.filter(_.size == Conf.sizeOfTable)
             findPairing(seating, newCompatibilityMap, newPairing, ban)
           } else {
             logger(TRACE,s"Pairing table ${table.map(_.id).mkString(" with ")}")
@@ -33,7 +33,7 @@ object PairingAlgorithm extends Tools  {
             // Remove all occurences of the candidates from the compatibility list
             val newCompatibilityMap = compatibilityMap.filterKeys(sub => !table.contains(sub)).mapValues(_.diff(table))
             // Remove temp table
-            val newPairing = table :: pairing.filter(_.size == Main.sizeOfTable)
+            val newPairing = table :: pairing.filter(_.size == Conf.sizeOfTable)
             findPairing(newSeating, newCompatibilityMap, newPairing, ban)
           }
         case Right(pair) => // New table or adding subscriber to a group
@@ -74,9 +74,9 @@ object PairingAlgorithm extends Tools  {
    * @return Right: a good pairing, Left: no pairing were found, so we rise a problem
    */
   private def bestSuit(seating: List[(Subscriber, Boolean)], compatibilityMap: Map[Subscriber, List[Subscriber]], pairing: List[List[Subscriber]]): Either[List[Subscriber],List[Subscriber]] = {
-    if(pairing.exists(_.size != Main.sizeOfTable)) {
+    if(pairing.exists(_.size != Conf.sizeOfTable)) {
       // Prioritize completion of table (there should be only one)
-      val tableToFill = pairing.filter(_.size != Main.sizeOfTable).head
+      val tableToFill = pairing.filter(_.size != Conf.sizeOfTable).head
       logger(DEBUG,s"Try to fill table ${tableToFill.mkString(", ")}")
       val eligibleMatch = seating.filterNot(_._2).map(_._1)
         // Remove subscriber with constraint, this also remove the member of the group

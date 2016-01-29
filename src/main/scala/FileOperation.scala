@@ -9,7 +9,7 @@ import scala.io.Source
  */
 object FileOperation extends Tools {
 
-  val separator = Main.configuration.getString("conf.file.separator")
+  val separator = Conf.configuration.getString("conf.file.separator")
 
   def configure() = {
     val reader = Source.fromURL(getClass.getResource("pairing.properties")).bufferedReader()
@@ -44,7 +44,7 @@ object FileOperation extends Tools {
   def saveFile(filename: String, roundPairing: List[List[List[Subscriber]]]) = {
     try {
       val writer = new PrintWriter(new File(s"$filename.out"))
-      writer.write(Subscriber.exportTournament(roundPairing, Main.configuration.getString("conf.file.format")))
+      writer.write(Subscriber.exportTournament(roundPairing, Conf.configuration.getString("conf.file.format")))
       writer.close()
     } catch {
       case ex: IOException => println(s"Had an IOException trying to write the file $filename.out.")
