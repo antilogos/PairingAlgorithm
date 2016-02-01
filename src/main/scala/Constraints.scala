@@ -32,7 +32,9 @@ object Constraints extends Tools {
   val blank = new Constraints("")
 
   def calculateScorePenalty(constraintList: List[List[Constraints]]): Int = {
-    Conf.configuration.getInt("conf.score.constraintSpecific")
+    calculationRules.map{_.split("=")}
+      .map{rule => ScoreCalculationInterpreter.compute(constraintList, rule(1).split(" "), 0)}
+    .sum
   }
 
   def displayRoundReport(pairing: List[List[Subscriber]], round: Int, previousRound: List[List[List[Subscriber]]]) = {
@@ -67,6 +69,17 @@ object Constraints extends Tools {
     report += ConstraintsLOTRLCG.displayTableReport(pair.map(_.constraints).asInstanceOf[List[List[ConstraintsLOTRLCG]]])
     if(report.isEmpty) report += "ok"
     logger(3,s"Round $round - table $table - score ${computeTableScore(round,pair, previousRound)}: $report")
+  }
+}
+
+object ScoreCalculationInterpreter {
+  // calculationRules: List(threat=EACH VARIANCE 27 SUM $THREAT, sphere=PRODUCT GROUPBY $SPHERE)
+  def compute(round: List[List[Constraints]], calculationRules: Array[String], accumulator: Int): Int = {
+    if(calculationRules.length == 0) accumulator
+    else calculationRules.head match {
+      case arg =>
+        compute(round, calculationRules.tail, accumulator)
+    }
   }
 }
 

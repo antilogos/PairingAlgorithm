@@ -93,12 +93,19 @@ __score constraintSpecific__: the score penalty to balance table, specific to th
 # Package Description
 
 __src/main/resources/applicaion.conf__: configuration file for the parameters
+
 __src/main/scala/Constraints.scala__: source file for describing constraints
+
 __src/main/scala/Subscriber.scala__: source file for describing subscriber
+
 __src/main/scala/ReduceAlgorithm.scala__: source file for the Reduce algorithm
+
 __src/main/scala/GreedyAlgorithm.scala__: source file for the Greedy algorithm
+
 __src/main/scala/ShuffleAlgorithm.scala__: source file for the Shuffle algorithm
+
 __src/main/scala/Tools.scala__: source file for some tools: logging and providing a random input
+
 __src/main/scala/FileOperation.scala__: source file for file operation: reading input and writting output
 
 # TODO LIST
