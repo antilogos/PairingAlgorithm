@@ -9,7 +9,7 @@ It should be generic, and/or propose a list of specific encounters.
 It should manage drop out during rotations.
 ## Notions
 The code use the following definition for this notions:
-### Subscriber
+### domain.Subscriber
 A participant of the encounter, which need to be paired.
 ### Constraints
 A list of constraints a participant brings, making him impossible to be paired with participant with __at least__ one constraints in common.
@@ -96,7 +96,7 @@ __src/main/resources/applicaion.conf__: configuration file for the parameters
 
 __src/main/scala/Constraints.scala__: source file for describing constraints
 
-__src/main/scala/Subscriber.scala__: source file for describing subscriber
+__src/main/scala/domain.Subscriber.scala__: source file for describing subscriber
 
 __src/main/scala/ReduceAlgorithm.scala__: source file for the Reduce algorithm
 
@@ -104,7 +104,7 @@ __src/main/scala/GreedyAlgorithm.scala__: source file for the Greedy algorithm
 
 __src/main/scala/ShuffleAlgorithm.scala__: source file for the Shuffle algorithm
 
-__src/main/scala/Tools.scala__: source file for some tools: logging and providing a random input
+__src/main/scala/domain.Tools.scala__: source file for some tools: logging and providing a random input
 
 __src/main/scala/FileOperation.scala__: source file for file operation: reading input and writting output
 

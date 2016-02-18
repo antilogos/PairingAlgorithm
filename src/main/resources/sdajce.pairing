@@ -1,0 +1,80 @@
+# Line begining with # are comments
+#separator=\t
+# Description of Constraint structure (ID is mandatory for both, GROUP is mandatory for subscribers, constraints list is made of C.n)
+fields.subscribers=ID	C.1	C.2	C.3	GROUP
+fields.constraints=NAME	ID	THREAT	WILL	ATT	DEF	HP	SPHERE
+# Line beginning with | are Constraints rule (only one)
+|NAME
+# Line beginning with : are calculation rules
+:sphere=PRODUCT GROUPBY $SPHERE
+:threat=EACH VARIANCE 27 SUM $THREAT
+# Inventory of Constraints
+Amarthiul	Amarthiúl	10	1	3	3	3	L
+Aragorn	Aragorn I	12	2	3	2	5	L
+Balin	Balin	9	2	1	2	4	L
+Boromir	Boromir II	11	1	3	2	5	L
+Celeborn	Celeborn	11	3	2	2	4	L
+Dain	Dáin Pied d'Acier	11	1	2	3	5	L
+Elrohir	Elrohir	10	2	2	1	4	L
+Erkenbrand	Erkenbrand	10	1	2	3	4	L
+Faramir	Faramir II	11	2	2	2	5	L
+Gloin	Glóin	9	2	2	1	4	L
+Halbarad	Halbarad	10	2	2	2	4	L
+Hirluin	Hirluin le Beau	8	1	1	1	4	L
+Imrahil	Prince Imrahil	11	2	3	2	4	L
+Sam	Sam Gamgee	8	3	1	1	3	L
+Theodred	Théodred	8	1	2	1	4	L
+Thorin	Thorin Écu-de-Chêne	12	3	3	1	5	L
+Aragorn	Aragorn III	12	2	3	2	5	T
+Bard	Bard l'Archer	11	2	3	2	4	T
+Beorn	Beorn	12	0	5	1	10	T
+Beregond	Beregond	10	0	1	4	4	T
+Boromir	Boromir I	11	1	3	2	5	T
+Brand	Brand fils de Bain	10	2	3	2	3	T
+Dori	Dori	10	1	2	2	5	T
+Elladan	Elladan	10	2	1	2	4	T
+Eomer	Éomer	10	1	3	2	4	T
+Gimli	Gimli	11	2	2	2	5	T
+Hama	Háma	9	1	3	1	4	T
+Legolas	Legolas	9	1	3	1	4	T
+Mablung	Mablung	10	2	2	2	4	T
+Merry	Merry I	6	2	0	1	2	T
+Thalin	Thalin	9	1	2	2	4	T
+Theoden	Théoden I	12	2	3	2	4	T
+Arwen	Arwen Undómiel	9	3	1	2	3	S
+Caldara	Caldara	8	2	1	2	3	S
+Círdan	Círdan	12	4	2	2	4	S
+Dunhere	Dúnhere	8	1	2	1	4	S
+Dwalin	Dwalin	9	1	2	2	4	S
+Eleanor	Eleanor	7	1	1	2	3	S
+Eowyn	Éowyn	9	4	1	1	3	S
+Bolger	Fatty Bolger	7	1	1	2	3	S
+Frodon	Frodo Baggins	7	2	1	2	2	S
+Galadriel	Galadriel	9	4	0	0	4	S
+Glorfindel	Glorfindel II	5	3	3	1	5	S
+Idraen	Idraen	11	2	3	2	4	S
+Merry	Merry II	6	2	1	1	2	S
+Nori	Nori	9	2	1	2	4	S
+Oin	Oin	8	2	1	1	4	S
+Pippin	Pippin I	6	2	1	1	2	S
+Theoden	Théoden II	12	2	3	2	4	S
+Aragorn	Aragorn II	12	2	3	2	5	R
+Beravor	Beravor	10	2	2	2	4	R
+Bifur	Bifur	7	2	1	2	3	R
+Bilbon	Bilbo Baggins	9	1	1	2	2	R
+Bombur	Bombur	8	0	1	2	5	R
+Damrod	Damrod	9	2	2	1	4	R
+Denethor	Denethor	8	1	1	3	3	R
+Elrond	Elrond	13	3	2	3	4	R
+Erestor	Erestor	10	2	2	2	4	R
+Faramir	Faramir I	11	2	2	2	5	R
+Galdor	Galdor	9	2	2	1	4	R
+Glorfindel	Glorfindel I	12	3	3	1	5	R
+Gríma	Gríma	9	2	1	2	3	R
+Haldir	Haldir of Lórien	9	2	3	1	3	R
+Mirlonde	Mirlonde	8	2	2	1	3	R
+Ori	Ori	8	2	2	1	3	R
+Pippin	Pippin II	6	2	1	1	2	R
+Rossiel	Rossiel	8	2	1	2	3	R
+Sylvebarbe	Sylvebarbe	13	2	3	3	5	R
+Gandalf	Gandalf Gandalf	14	3	3	3	5	N
