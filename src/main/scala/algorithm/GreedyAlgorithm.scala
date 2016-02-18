@@ -1,8 +1,13 @@
+package algorithm
+
+import domain.{Constraints, Subscriber, Tools}
 /**
  * The Greedy algorithm will start from a solution and try to improve it by replacing one subscriber until it find the local maximum.
  */
 object GreedyAlgorithm extends Tools {
+
   def searchSeatingForRound(listOfImprovement: Map[Subscriber, Int], seating: List[(Subscriber, Boolean)], pairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]], maxScore: List[List[Subscriber]], round: Int, previousRound: List[List[List[Subscriber]]]): List[List[Subscriber]] = {
+    logger(TRACE,s" --- Greedy Algorithm --- ")
     // Take first subscriber in the non-yet-optimised list
     val pickMutation = listOfImprovement.filter(_._2 == 0).head._1
     logger(TRACE,s"Try mutation on $pickMutation")
@@ -12,12 +17,12 @@ object GreedyAlgorithm extends Tools {
     logger(TRACE,s"Subscribers ${eligibleMutation.map(_.id).mkString(",")} have been freed")
     // Remove all from their pairing
     val newPairing = pairing.map(_.filterNot(_.equals(pickMutation)).filterNot(eligibleMutation.contains(_))).filter(_.nonEmpty)
-    logger(TRACE,s"New Pairing disposition is ${newPairing.map(_.map(_.id).mkString("-")).mkString(";")} to pass to Pairing Algorithm")
+    logger(TRACE,s"New Pairing disposition is ${newPairing.map(_.map(_.id).mkString("-")).mkString(";")} to pass to Reduce Algorithm")
     val newSeating = (pickMutation, false) :: seating.filterNot(_._1.equals(pickMutation)).filterNot(seat => eligibleMutation.contains(seat._1)) ++ eligibleMutation.map{(_, false)}
     // Add the mutation in ban list
     val newBan = pairing :: ban
     // Build new compatibility map
-    val newCompatibilityMap = ReduceAlgorithm.buildCompatibilityMap(seating.filterNot(_._2).map(_._1))
+    val newCompatibilityMap = Manager.buildCompatibilityMap(seating.map(_._1))
     // Run the Reduce algorithm to complete the table
     val mutatedPairing = ReduceAlgorithm.findPairing(newSeating, newCompatibilityMap, newPairing, newBan)
     var newImprovement = listOfImprovement
@@ -41,7 +46,7 @@ object GreedyAlgorithm extends Tools {
     // Algorithm end when we did not make any progress after trying to swap everyone one
     if(newImprovement.forall(_._2 != 0)) {
       // End of algorithm pass, return the best pairing
-      logger(INFO,s"End of Genetic Algorithm, new score is ${newImprovement.values.max}")
+      logger(INFO,s"End of Greedy Algorithm, new score is ${newImprovement.values.max}")
       newMaxScore
     } else {
       // Continue searching for the local maximum

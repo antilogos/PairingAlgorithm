@@ -1,4 +1,8 @@
+package util
+
 import java.io.{File, FileNotFoundException, IOException, PrintWriter}
+
+import domain.{Constraints, Subscriber, Tools}
 
 import scala.io.Source
 /**
@@ -11,9 +15,10 @@ object FileOperation extends Tools {
   val separator = Conf.configuration.getString("conf.file.separator")
 
   def loadConfigurationFile(filename: String) = {
+    logger(DEBUG, "is it loading the file ?")
     var separator = "\t"
     try {
-      Source.fromFile(filename, "UTF-8").getLines().foreach {
+      Source.fromInputStream(FileOperation.getClass.getResourceAsStream(s"/$filename"), "UTF-8").getLines().foreach {
         case line: String if line.startsWith("separator=") => separator = line.replaceAll("separator=(.)", "$1")
         case line: String if line.startsWith("|") => Constraints.identityRules = line.substring(1)
         case line: String if line.startsWith(":") => Constraints.calculationRules = line.substring(1) :: Constraints.calculationRules
@@ -30,9 +35,9 @@ object FileOperation extends Tools {
       logger(DEBUG, s"subscribers fields: ${Subscriber.fields}")
       logger(DEBUG, s"inventory: ${Constraints.inventory}")
     } catch {
-      case ex: FileNotFoundException => println(s"Couldn't find the file $filename.")
+      case ex: FileNotFoundException => logger(INFO, s"Couldn't find the file $filename.")
         Nil
-      case ex: IOException => println(s"Had an IOException trying to read the file $filename.")
+      case ex: IOException => logger(INFO, s"Had an IOException trying to read the file $filename.")
         Nil
     }
   }
@@ -46,11 +51,23 @@ object FileOperation extends Tools {
       logger(DEBUG, s"subscribers list: $subscibers")
       subscibers
     } catch {
-      case ex: FileNotFoundException => println(s"Couldn't find the file $filename.")
+      case ex: FileNotFoundException => logger(INFO, s"Couldn't find the file $filename.")
         Nil
-      case ex: IOException => println(s"Had an IOException trying to read the file $filename.")
+      case ex: IOException => logger(INFO, s"Had an IOException trying to read the file $filename.")
         Nil
     }
+  }
+
+  def loadSubscriberFromText(text: String): List[Subscriber] = {
+    //val constraintMap = ConstraintsLOTRLCG.list.map{constraint => (constraint.id, constraint)}.toMap
+    val subscibers = text.split("\n").filterNot(_.isEmpty).map(_.split(separator).map(_.trim).zip(Subscriber.fields).map(_.swap).toMap).map{new Subscriber(_)}.toList
+    logger(INFO, "Using list of subscribers from text field")
+    logger(DEBUG, s"subscribers list: $subscibers")
+    subscibers
+  }
+
+  def printToScreen(roundPairing: List[List[List[Subscriber]]]): String = {
+    Subscriber.exportTournament(roundPairing, Conf.configuration.getString("conf.file.format"))
   }
 
   def saveSubscriberFile(filename: String, roundPairing: List[List[List[Subscriber]]]) = {
@@ -59,7 +76,7 @@ object FileOperation extends Tools {
       writer.write(Subscriber.exportTournament(roundPairing, Conf.configuration.getString("conf.file.format")))
       writer.close()
     } catch {
-      case ex: IOException => println(s"Had an IOException trying to write the file $filename.out.")
+      case ex: IOException => logger(INFO, s"Had an IOException trying to write the file $filename.out.")
     }
   }
 }

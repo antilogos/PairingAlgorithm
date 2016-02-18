@@ -1,3 +1,7 @@
+package algorithm
+
+import domain.{Constraints, Subscriber, Tools}
+import util.Conf
 /**
  * The Reduce Algorithm will recursively search for the first possible pairing satisfying all constraints.
  * It will choose the most difficult subscribers to pair and try to pair them.
@@ -6,6 +10,7 @@
  */
 object ReduceAlgorithm extends Tools  {
   def findPairing(seating: List[(Subscriber, Boolean)], compatibilityMap: Map[Subscriber, List[Subscriber]], pairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]]): (List[List[Subscriber]], List[List[List[Subscriber]]]) = {
+    logger(TRACE,s" --- Reduce Algorithm --- ")
     // Verify stop condition : all seated
     if(seating.forall(_._2)) {
       logger(TRACE,"End of Pairing Algorithm, solution was found")
@@ -13,6 +18,8 @@ object ReduceAlgorithm extends Tools  {
       (pairing, ban)
     } else {
       logger(DEBUG,s"running pairing algorithm, set items : ${pairing.filter(_.size == Conf.sizeOfTable).map(table => table.map(sub => s"${sub.id}-${sub.constraints.mkString(",")}").mkString("[",", ","]")).mkString(";")}")
+      logger(DEBUG,s"yet to fit items : ${seating.filterNot(_._2)}")
+      logger(DEBUG,s"possible pairing : ${compatibilityMap.mkString(";")}")
       val hypothesis: Either[List[Subscriber],List[Subscriber]] = bestSuit(seating, compatibilityMap, pairing)
       hypothesis match {
         case Right(table) if table.size == Conf.sizeOfTable => // Completing a table
@@ -62,7 +69,7 @@ object ReduceAlgorithm extends Tools  {
             val newBan = pairing :: ban
             logger(TRACE,s"No solution found with this pairing, adding ban on ${pairing.map{pair => pair.map(sub => sub.id)}.mkString(", ")} and retrying")
             // Construct the new compatibility map
-            val newCompatibilityMap = buildCompatibilityMap(seating.map(_._1))
+            val newCompatibilityMap = Manager.buildCompatibilityMap(seating.map(_._1))
             logger(DEBUG,s"New compatibility map is $newCompatibilityMap")
             findPairing(newSeating, newCompatibilityMap, Nil, newBan)
           }
@@ -143,17 +150,5 @@ object ReduceAlgorithm extends Tools  {
         )
       }
     }
-  }
-
-  /**
-   * Basic compatibility map. Use only mandatory constraints.
-   * @param input the list of subscribers
-   * @return the list of all subscribers mapped with a list of all available pairing
-   */
-  def buildCompatibilityMap(input: List[Subscriber]): Map[Subscriber, List[Subscriber]] = {
-    // Put all subscriber available to all subscriber except themself
-    Map(input.map{register => register -> input.filterNot(_.equals(register))}.toSeq: _*)
-    // Filter incompatibility
-    .map{case (sub, possibleMatch) => (sub, possibleMatch.filter(current => sub.constraints.map(_.getKey(Constraints.identityRules)).intersect(current.constraints.map(_.getKey(Constraints.identityRules))).isEmpty))}
   }
 }

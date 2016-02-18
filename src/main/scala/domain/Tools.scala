@@ -1,16 +1,22 @@
-import java.io.{IOException, File, PrintWriter}
+package domain
+
+import java.io.{File, IOException, PrintWriter}
+
+import ui.TabDisplay
+import util.Conf
 
 import scala.util.Random
 
 /**
  * Created by vdoquang on 20/01/16.
- * 
+ *
  * Table Pairing Algorithm
- * 
+ *
  */
 trait Tools {
 
   def randomSeed(): List[Subscriber] = {
+    val fakeGroup = List("", "ALPHA", "", "BETA", "", "CHARLIE", "", "DELTA", "", "ECHO", "", "FOXTROT", "", "GOLF", "", "HECTOR", "")
     def openInscription = Conf.sizeOfTable * 3
     def pickRandomConstraints(): Constraints = new Constraints(scala.util.Random.shuffle(Constraints.inventory.keys.toList).head)
     logger(INFO, "Random Initialization is on")
@@ -18,7 +24,7 @@ trait Tools {
       new Subscriber((if (groupName.equals("")) "OPEN" else groupName) + i.toString, (1 to 3).toList.map{i => pickRandomConstraints()}, groupName) }
     var i = 0
     while (i < openInscription) {
-      logger(TRACE, s"Subscriber ${i + 1} \t : ${subscriberList(i).id} - ${subscriberList(i).constraints.mkString("[", ",", "]")}")
+      logger(TRACE, s"domain.Subscriber ${i + 1} \t : ${subscriberList(i).id} - ${subscriberList(i).constraints.mkString("[", ",", "]")}")
       i += 1
     }
     try {
@@ -31,13 +37,13 @@ trait Tools {
     subscriberList
   }
 
-  val fakeGroup = List("", "ALPHA", "", "BETA", "", "CHARLIE", "", "DELTA", "", "ECHO", "", "FOXTROT", "", "GOLF", "", "HECTOR", "")
-
   val DEBUG: Integer = 0
   val TRACE: Integer = 1
   val INFO: Integer = 2
 
   def logger(level: Int, string: String) = {
-    if (level >= Conf.logLevel) println(string)
+    if (level >= Conf.logLevel) {
+      TabDisplay.getInstance().log(string)
+    }
   }
 }
