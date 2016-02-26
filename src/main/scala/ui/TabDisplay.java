@@ -33,7 +33,7 @@ public class TabDisplay extends JPanel {
             log = log.delete(0, log.length() - maxCharacter);
         }
         prompt.setText(log.toString());
+        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
         this.revalidate();;
-        scrollPane.getHorizontalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
     }
 }

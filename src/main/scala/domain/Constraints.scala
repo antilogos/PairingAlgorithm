@@ -50,7 +50,7 @@ object Constraints extends Tools {
   def displayTableReport(round: Integer, table: Int, pair: List[Subscriber], previousRound: List[List[List[Subscriber]]]) = {
     var report = ""
     if(pair.filterNot(_.group == "").groupBy(_.group).exists(_._2.size > 1)) report += " group conflict "
-    if(previousRound.exists(round => round.exists(table => table.intersect(pair).size > 1))) report += " seen in previous round : " + previousRound.filter(round => round.exists(table => table.intersect(pair).size > 1)).flatMap(round => round.flatMap(table => table.map(sub => sub.id))).mkString(":")
+    if(previousRound.exists(round => round.exists(table => table.intersect(pair).size > 1))) report += " seen in previous round : " + previousRound.map(round => round.filter(table => table.intersect(pair).size > 1)).flatMap(round => round.flatMap(table => table.map(sub => sub.id))).mkString(":")
     report += ConstraintsLOTRLCG.displayTableReport(pair.map(_.constraints).asInstanceOf[List[List[ConstraintsLOTRLCG]]])
     if(report.isEmpty) report += "ok"
     logger(INFO,s"Round $round - table $table - score ${computeTableScore(round,pair, previousRound)}: $report")

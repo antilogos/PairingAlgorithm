@@ -14,7 +14,6 @@ import ui.{MainFrame, TabDisplay}
 object Main extends Tools {
   def main(args: Array[String]) {
     FileOperation.loadConfigurationFile("sdajce.pairing")
-
     MainFrame.getInstance()
   }
 }
@@ -24,6 +23,7 @@ object Conf {
 
   val sizeOfTable = configuration.getInt("conf.tournament.sizeOfTable")
   val numberOfRound = configuration.getInt("conf.tournament.numberOfRound")
+  val maxTry = configuration.getInt("conf.maxTry")
   val logLevel = configuration.getInt("conf.logLevel")
 
   val groupScoreWeight = configuration.getInt("conf.score.group")

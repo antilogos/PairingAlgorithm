@@ -9,8 +9,10 @@ import util.Conf
  * If all positions from the start are banned, the Algorithm will end in faillure.
  */
 object ReduceAlgorithm extends Tools  {
+
   def findPairing(seating: List[(Subscriber, Boolean)], compatibilityMap: Map[Subscriber, List[Subscriber]], pairing: List[List[Subscriber]], ban: List[List[List[Subscriber]]]): (List[List[Subscriber]], List[List[List[Subscriber]]]) = {
     logger(TRACE,s" --- Reduce Algorithm --- ")
+    //logger(4, s"current ban list is: $ban")
     // Verify stop condition : all seated
     if(seating.forall(_._2)) {
       logger(TRACE,"End of Pairing Algorithm, solution was found")
@@ -21,6 +23,7 @@ object ReduceAlgorithm extends Tools  {
       logger(DEBUG,s"yet to fit items : ${seating.filterNot(_._2)}")
       logger(DEBUG,s"possible pairing : ${compatibilityMap.mkString(";")}")
       val hypothesis: Either[List[Subscriber],List[Subscriber]] = bestSuit(seating, compatibilityMap, pairing)
+      logger(DEBUG, s"working on hypothesis $hypothesis")
       hypothesis match {
         case Right(table) if table.size == Conf.sizeOfTable => // Completing a table
           // Reject if the situation was banned
@@ -69,7 +72,7 @@ object ReduceAlgorithm extends Tools  {
             val newBan = pairing :: ban
             logger(TRACE,s"No solution found with this pairing, adding ban on ${pairing.map{pair => pair.map(sub => sub.id)}.mkString(", ")} and retrying")
             // Construct the new compatibility map
-            val newCompatibilityMap = Manager.buildCompatibilityMap(seating.map(_._1))
+            val newCompatibilityMap = Manager.buildCompatibilityMap()
             logger(DEBUG,s"New compatibility map is $newCompatibilityMap")
             findPairing(newSeating, newCompatibilityMap, Nil, newBan)
           }
