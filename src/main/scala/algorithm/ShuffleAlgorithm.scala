@@ -1,7 +1,8 @@
 package algorithm
 
 import domain.{Constraints, Subscriber, Tools}
-import util.Conf
+import util.Main._
+import util.{FileOperation, Conf}
 
 /**
  * The Shuffle algorithm will run the deterministic Greedy algorithm with different initial combinaison (just a different ordering) and keep the biggest score
@@ -24,10 +25,11 @@ object ShuffleAlgorithm extends Tools {
       val tryAlgo = GreedyAlgorithm.searchSeatingForRound(shuffleImprovement, shuffleSeating, initialPairing, ban, maxScorePairing, round, previousRoundPairing)
       i = i + 1
       // Keep the better solution
-      if(Constraints.computeRoundScore(round, tryAlgo, previousRoundPairing) > Constraints.computeRoundScore(round, acc, previousRoundPairing))
+      if(Constraints.computeRoundScore(round, tryAlgo, previousRoundPairing) > Constraints.computeRoundScore(round, acc, previousRoundPairing)) {
         tryAlgo
-      else
+      } else {
         acc
+      }
     }
     Constraints.displayRoundReport(bestOfNRun, round, previousRoundPairing)
     bestOfNRun

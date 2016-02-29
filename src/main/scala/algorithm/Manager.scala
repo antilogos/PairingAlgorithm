@@ -30,8 +30,8 @@ object Manager {
       val roundDisposition = (1 to Conf.numberOfRound).toList.foldLeft(List[List[List[Subscriber]]]()) { (previousRoundPairing, round) =>
         logger(INFO, s"\n ========== Round $round - Beggining ========== \n")
         // Add the situation in previous round
-        ShuffleAlgorithm.arrangeSeating(disposition._1, List(), round, previousRoundPairing) :: previousRoundPairing
-      }
+        ShuffleAlgorithm.arrangeSeating(disposition._1, disposition._2, round, previousRoundPairing) :: previousRoundPairing
+      }.reverse
       FileOperation.printToScreen(roundDisposition)
     }
   }
