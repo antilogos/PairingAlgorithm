@@ -3,7 +3,7 @@ package util
 import algorithm.{Manager, ReduceAlgorithm, ShuffleAlgorithm}
 import com.typesafe.config.ConfigFactory
 import domain.{Subscriber, Tools}
-import ui.{MainFrame, TabDisplay}
+import ui.{MainFrame, TabTextLog}
 
 /**
  * Created by vdoquang on 20/01/16.

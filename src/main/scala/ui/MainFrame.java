@@ -29,7 +29,7 @@ public class MainFrame extends JFrame {
 
         add(tabbedPane, BorderLayout.CENTER);
 
-        tabbedPane.addTab("Log", TabDisplay.getInstance());
+        tabbedPane.addTab("Log", TabTextLog.getInstance());
         tabbedPane.addTab("Pairing", TabRun.getInstance());
     }
 }

@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,14 +42,25 @@ public class TabRun extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getSource().equals(instance.submitButton)) {
-                MainFrame.tabbedPane.setSelectedIndex(MainFrame.tabbedPane.indexOfComponent(TabDisplay.getInstance()));
+                MainFrame.tabbedPane.setSelectedIndex(MainFrame.tabbedPane.indexOfComponent(TabTextLog.getInstance()));
                 new Thread() {
                     @Override
                     public void run() {
-                        String output = Manager.defaultRun(FileOperation.loadSubscriberFromText(instance.inputField.getText()));
-                        outputField.setText(output);
-                        instance.revalidate();
-                        MainFrame.tabbedPane.setSelectedIndex(MainFrame.tabbedPane.indexOfComponent(instance));
+                        scala.collection.immutable.List<scala.collection.immutable.List<scala.collection.immutable.List<Subscriber>>> roundDisposition
+                                = Manager.defaultRun(FileOperation.loadSubscriberFromText(instance.inputField.getText()));
+                        //outputField.setText(output);
+                        MainFrame.tabbedPane.add("Disposition",TabFinalDisplay.getInstance());
+                        List<List<List<Subscriber>>> javaList = new ArrayList<List<List<Subscriber>>>();
+                        for(scala.collection.immutable.List<scala.collection.immutable.List<Subscriber>> round : scala.collection.JavaConversions.asJavaList(roundDisposition)) {
+                            List<List<Subscriber>> javaRound = new ArrayList<List<Subscriber>>();
+                            for(scala.collection.immutable.List<Subscriber> table : scala.collection.JavaConversions.asJavaList(round)) {
+                                List<Subscriber> javaTable = scala.collection.JavaConversions.asJavaList(table);
+                                javaRound.add(javaTable);
+                            }
+                            javaList.add(javaRound);
+                        }
+                        TabFinalDisplay.getInstance().displayTournament(javaList);
+                        MainFrame.tabbedPane.setSelectedIndex(MainFrame.tabbedPane.indexOfComponent(TabFinalDisplay.getInstance()));
                     }
                 }.start();
             }

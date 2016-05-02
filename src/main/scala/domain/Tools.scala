@@ -2,7 +2,7 @@ package domain
 
 import java.io.{File, IOException, PrintWriter}
 
-import ui.TabDisplay
+import ui.TabTextLog
 import util.Conf
 
 import scala.util.Random
@@ -43,7 +43,7 @@ trait Tools {
 
   def logger(level: Int, string: String) = {
     if (level >= Conf.logLevel) {
-      TabDisplay.getInstance().log(string)
+      TabTextLog.getInstance().log(string)
     }
   }
 }

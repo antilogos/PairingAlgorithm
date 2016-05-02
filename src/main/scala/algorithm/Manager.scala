@@ -11,7 +11,7 @@ object Manager {
 
   var subscriberList = List[Subscriber]()
 
-  def defaultRun(input: List[Subscriber]):  String = {
+  def defaultRun(input: List[Subscriber]):  List[List[List[Subscriber]]] = {
     // Complete the tournament with blank subscribers, who doesn't contribute to score, are compatible with everyone, are already seated and cannot move
     subscriberList = (if (input.size % Conf.sizeOfTable != 0) (1 to Conf.sizeOfTable - (input.size % Conf.sizeOfTable)).toList.map { _ => Subscriber.blank } else Nil) ++ input
     // Initialization - all pairing are constraints driven
@@ -24,7 +24,7 @@ object Manager {
     val disposition = ReduceAlgorithm.findPairing(seating, compatibility, blankPairing, Nil)
     if (disposition._1.isEmpty) {
       // No solution found
-      "No solution was found"
+      List.empty
     } else {
       logger(DEBUG, s"Initial pairing is:\n${disposition._1.map(table => table.map(_.id).mkString("\t")).mkString("\n")}")
       val roundDisposition = (1 to Conf.numberOfRound).toList.foldLeft(List[List[List[Subscriber]]]()) { (previousRoundPairing, round) =>
@@ -32,7 +32,7 @@ object Manager {
         // Add the situation in previous round
         ShuffleAlgorithm.arrangeSeating(disposition._1, disposition._2, round, previousRoundPairing) :: previousRoundPairing
       }.reverse
-      FileOperation.printToScreen(roundDisposition)
+      roundDisposition
     }
   }
 

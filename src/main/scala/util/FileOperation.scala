@@ -66,8 +66,8 @@ object FileOperation extends Tools {
     subscibers
   }
 
-  def printToScreen(roundPairing: List[List[List[Subscriber]]]): String = {
-    Subscriber.exportTournament(roundPairing, Conf.configuration.getString("conf.file.format"))
+  def printToScreen(roundPairing: List[List[List[Subscriber]]], outputFormat: Option[String] = None): String = {
+    Subscriber.exportTournament(roundPairing, outputFormat.getOrElse(Conf.configuration.getString("conf.file.format")))
   }
 
   def saveSubscriberFile(filename: String, roundPairing: List[List[List[Subscriber]]]) = {
