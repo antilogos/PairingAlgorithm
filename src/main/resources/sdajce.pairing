@@ -13,7 +13,7 @@ Amarthiul	Amarthiúl	10	1	3	3	3	L
 Aragorn	Aragorn I	12	2	3	2	5	L
 Aragorn	Aragorn II	12	2	3	2	5	R
 Aragorn	Aragorn III	12	2	3	2	5	T
-Argalad Argalad 9 2 2 1 4 R
+Argalad	Argalad	9	2	2	1	4	R
 Arwen	Arwen Undómiel	9	3	1	2	3	S
 Balin	Balin	9	2	1	2	4	L
 Bard	Bard l'Archer	11	2	3	2	4	T
@@ -37,7 +37,7 @@ Dori	Dori	10	1	2	2	5	T
 Dunhere	Dúnhere	8	1	2	1	4	S
 Dwalin	Dwalin	9	1	2	2	4	S
 Eleanor	Eleanor	7	1	1	2	3	S
-Elfhelm Elfhelm 10  2 2 2 4 L
+Elfhelm	Elfhelm	10	2	2	2	4	L
 Elladan	Elladan	10	2	1	2	4	T
 Elrohir	Elrohir	10	2	2	1	4	L
 Elrond	Elrond	13	3	2	3	4	R
@@ -62,18 +62,18 @@ Gros Bolger	Fatty Bolger	7	1	1	2	3	S
 Halbarad	Halbarad	10	2	2	2	4	L
 Haldir	Haldir de la Lórien	9	2	3	1	3	R
 Hama	Háma	9	1	3	1	4	T
-Hirgon  Hirgon  9 2 2 1 4 T
+Hirgon	Hirgon	9	2	2	1	4	T
 Hirluin	Hirluin le Beau	8	1	1	1	4	L
 Idraen	Idraen	11	2	3	2	4	S
-Kahliel Kahliel 10  2 2 2 4 L
-Lanwyn  Lanwyn  9 2 3 1 3 S
+Kahliel	Kahliel	10	2	2	2	4	L
+Lanwyn	Lanwyn	9	2	3	1	3	S
 Legolas	Legolas I	9	1	3	1	4	T
 Legolas	Legolas II	9	1	3	1	4	S
 Mablung	Mablung	10	2	2	2	4	T
 Merry	Merry I	6	2	0	1	2	T
 Merry	Merry II	6	2	1	1	2	S
 Mirlonde	Mirlonde	8	2	2	1	3	R
-Na'asiyah Na'asiyah 8 1 2 2 4 T
+Na'asiyah	Na'asiyah	8	1	2	2	4	T
 Nori	Nori	9	2	1	2	4	S
 Oin	Oin	8	2	1	1	4	S
 Ori	Ori	8	2	2	1	3	R
@@ -90,4 +90,4 @@ Theoden	Théoden I	12	2	3	2	4	T
 Theoden	Théoden II	12	2	3	2	4	S
 Theodred	Théodred	8	1	2	1	4	L
 Thorin	Thorin Écu-de-Chêne	12	3	3	1	5	L
-Thurindir Thurindir 8 2 2 0 4 R
+Thurindir	Thurindir	8	2	2	0	4	R

@@ -32,6 +32,7 @@ object Manager {
         // Add the situation in previous round
         ShuffleAlgorithm.arrangeSeating(disposition._1, disposition._2, round, previousRoundPairing) :: previousRoundPairing
       }.reverse
+      FileOperation.saveSubscriberFile("toto.html", roundDisposition)
       roundDisposition
     }
   }
