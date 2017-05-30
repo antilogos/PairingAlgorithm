@@ -11,70 +11,83 @@ fields.constraints=NAME	ID	THREAT	WILL	ATT	DEF	HP	SPHERE
 # Inventory of Constraints
 Amarthiul	Amarthiúl	10	1	3	3	3	L
 Aragorn	Aragorn I	12	2	3	2	5	L
-Balin	Balin	9	2	1	2	4	L
-Boromir	Boromir II	11	1	3	2	5	L
-Celeborn	Celeborn	11	3	2	2	4	L
-Dain	Dáin Pied d'Acier	11	1	2	3	5	L
-Elrohir	Elrohir	10	2	2	1	4	L
-Erkenbrand	Erkenbrand	10	1	2	3	4	L
-Faramir	Faramir II	11	2	2	2	5	L
-Gloin	Glóin	9	2	2	1	4	L
-Halbarad	Halbarad	10	2	2	2	4	L
-Hirluin	Hirluin le Beau	8	1	1	1	4	L
-Imrahil	Prince Imrahil	11	2	3	2	4	L
-Sam	Sam Gamgee	8	3	1	1	3	L
-Theodred	Théodred	8	1	2	1	4	L
-Thorin	Thorin Écu-de-Chêne	12	3	3	1	5	L
+Aragorn	Aragorn II	12	2	3	2	5	R
 Aragorn	Aragorn III	12	2	3	2	5	T
+Argalad Argalad 9 2 2 1 4 R
+Arwen	Arwen Undómiel	9	3	1	2	3	S
+Balin	Balin	9	2	1	2	4	L
 Bard	Bard l'Archer	11	2	3	2	4	T
 Beorn	Beorn	12	0	5	1	10	T
-Beregond	Beregond	10	0	1	4	4	T
-Boromir	Boromir I	11	1	3	2	5	T
-Brand	Brand fils de Bain	10	2	3	2	3	T
-Dori	Dori	10	1	2	2	5	T
-Elladan	Elladan	10	2	1	2	4	T
-Eomer	Éomer	10	1	3	2	4	T
-Gimli	Gimli	11	2	2	2	5	T
-Hama	Háma	9	1	3	1	4	T
-Legolas	Legolas	9	1	3	1	4	T
-Mablung	Mablung	10	2	2	2	4	T
-Merry	Merry I	6	2	0	1	2	T
-Thalin	Thalin	9	1	2	2	4	T
-Theoden	Théoden I	12	2	3	2	4	T
-Arwen	Arwen Undómiel	9	3	1	2	3	S
-Caldara	Caldara	8	2	1	2	3	S
-Círdan	Círdan le Charpentier	12	4	2	2	4	S
-Dunhere	Dúnhere	8	1	2	1	4	S
-Dwalin	Dwalin	9	1	2	2	4	S
-Eleanor	Eleanor	7	1	1	2	3	S
-Eowyn	Éowyn I	9	4	1	1	3	S
-Bolger	Fatty Bolger	7	1	1	2	3	S
-Frodon	Frodo Baggins	7	2	1	2	2	S
-Galadriel	Galadriel	9	4	0	0	4	S
-Glorfindel	Glorfindel II	5	3	3	1	5	S
-Idraen	Idraen	11	2	3	2	4	S
-Merry	Merry II	6	2	1	1	2	S
-Nori	Nori	9	2	1	2	4	S
-Oin	Oin	8	2	1	1	4	S
-Pippin	Pippin I	6	2	1	1	2	S
-Theoden	Théoden II	12	2	3	2	4	S
-Aragorn	Aragorn II	12	2	3	2	5	R
 Beravor	Beravor	10	2	2	2	4	R
+Beregond	Beregond	10	0	1	4	4	T
 Bifur	Bifur	7	2	1	2	3	R
 Bilbon	Bilbo Baggins	9	1	1	2	2	R
 Bombur	Bombur	8	0	1	2	5	R
+Boromir	Boromir I	11	1	3	2	5	T
+Boromir	Boromir II	11	1	3	2	5	L
+Brand	Brand fils de Bain	10	2	3	2	3	T
+Caldara	Caldara	8	2	1	2	3	S
+Celeborn	Celeborn	11	3	2	2	4	L
+Círdan	Círdan le Charpentier	12	4	2	2	4	S
+Dain	Dáin Pied d'Acier	11	1	2	3	5	L
 Damrod	Damrod	9	2	2	1	4	R
-Denethor	Denethor	8	1	1	3	3	R
+Denethor	Denethor I	8	1	1	3	3	R
+Denethor	Denethor II	8	1	1	3	3	L
+Dori	Dori	10	1	2	2	5	T
+Dunhere	Dúnhere	8	1	2	1	4	S
+Dwalin	Dwalin	9	1	2	2	4	S
+Eleanor	Eleanor	7	1	1	2	3	S
+Elfhelm Elfhelm 10  2 2 2 4 L
+Elladan	Elladan	10	2	1	2	4	T
+Elrohir	Elrohir	10	2	2	1	4	L
 Elrond	Elrond	13	3	2	3	4	R
+Eomer	Éomer	10	1	3	2	4	T
+Eowyn	Éowyn I	9	4	1	1	3	S
+Eowyn	Éowyn II	9	4	1	1	3	T
 Erestor	Erestor	10	2	2	2	4	R
+Erkenbrand	Erkenbrand	10	1	2	3	4	L
 Faramir	Faramir I	11	2	2	2	5	R
+Faramir	Faramir II	11	2	2	2	5	L
+Frodon	Frodo Baggins	7	2	1	2	2	S
+Galadriel	Galadriel	9	4	0	0	4	S
 Galdor	Galdor des Havres	9	2	2	1	4	R
-Glorfindel	Glorfindel I	12	3	3	1	5	R
-Gríma	Gríma	9	2	1	2	3	R
-Haldir	Haldir de la Lórien	9	2	3	1	3	R
-Mirlonde	Mirlonde	8	2	2	1	3	R
-Ori	Ori	8	2	2	1	3	R
-Pippin	Pippin II	6	2	1	1	2	R
-Rossiel	Rossiel	8	2	1	2	3	R
-Sylvebarbe	Sylvebarbe	13	2	3	3	5	R
 Gandalf	Gandalf Gandalf	14	3	3	3	5	N
+Gimli	Gimli I	11	2	2	2	5	T
+Gimli	Gimli II	11	2	2	2	5	L
+Gloin	Glóin	9	2	2	1	4	L
+Glorfindel	Glorfindel I	12	3	3	1	5	R
+Glorfindel	Glorfindel II	5	3	3	1	5	S
+Gríma	Gríma	9	2	1	2	3	R
+Gros Bolger	Fatty Bolger	7	1	1	2	3	S
+Halbarad	Halbarad	10	2	2	2	4	L
+Haldir	Haldir de la Lórien	9	2	3	1	3	R
+Hama	Háma	9	1	3	1	4	T
+Hirgon  Hirgon  9 2 2 1 4 T
+Hirluin	Hirluin le Beau	8	1	1	1	4	L
+Idraen	Idraen	11	2	3	2	4	S
+Kahliel Kahliel 10  2 2 2 4 L
+Lanwyn  Lanwyn  9 2 3 1 3 S
+Legolas	Legolas I	9	1	3	1	4	T
+Legolas	Legolas II	9	1	3	1	4	S
+Mablung	Mablung	10	2	2	2	4	T
+Merry	Merry I	6	2	0	1	2	T
+Merry	Merry II	6	2	1	1	2	S
+Mirlonde	Mirlonde	8	2	2	1	3	R
+Na'asiyah Na'asiyah 8 1 2 2 4 T
+Nori	Nori	9	2	1	2	4	S
+Oin	Oin	8	2	1	1	4	S
+Ori	Ori	8	2	2	1	3	R
+Pippin	Pippin I	6	2	1	1	2	S
+Pippin	Pippin II	6	2	1	1	2	R
+Prince Imrahil	Prince Imrahil I	11	2	3	2	4	L
+Prince Imrahil	Prince Imrahil II	11	2	3	2	4	T
+Rossiel	Rossiel	8	2	1	2	3	R
+Sam	Sam Gamgee	8	3	1	1	3	L
+Sylvebarbe	Sylvebarbe	13	2	3	3	5	R
+Theoden	Théoden II	12	2	3	2	4	S
+Thalin	Thalin	9	1	2	2	4	T
+Theoden	Théoden I	12	2	3	2	4	T
+Theoden	Théoden II	12	2	3	2	4	S
+Theodred	Théodred	8	1	2	1	4	L
+Thorin	Thorin Écu-de-Chêne	12	3	3	1	5	L
+Thurindir Thurindir 8 2 2 0 4 R
